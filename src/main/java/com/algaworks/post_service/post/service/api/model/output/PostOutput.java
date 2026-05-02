@@ -15,6 +15,6 @@ public class PostOutput {
     private String title;
     private String body;
     private String author;
-    private Integer wordCount;
+    private Long wordCount;
     private BigDecimal calculatedValue;
 }

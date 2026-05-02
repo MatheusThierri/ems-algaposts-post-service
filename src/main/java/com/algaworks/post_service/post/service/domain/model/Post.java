@@ -25,6 +25,6 @@ public class Post {
     private String title;
     private String body;
     private String author;
-    private Integer wordCount;
-    private BigDecimal calculateValue;
+    private Long wordCount;
+    private BigDecimal calculatedValue;
 }

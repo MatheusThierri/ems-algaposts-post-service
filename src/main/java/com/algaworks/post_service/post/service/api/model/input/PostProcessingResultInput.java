@@ -10,8 +10,8 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostProcessResultInput {
+public class PostProcessingResultInput {
     private UUID id;
-    private Integer wordCount;
+    private Long wordCount;
     private BigDecimal calculatedValue;
 }

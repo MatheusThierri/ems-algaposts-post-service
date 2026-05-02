@@ -9,7 +9,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostProcessOutput {
+public class PostProcessingOutput {
     private UUID id;
     private String postBody;
 }

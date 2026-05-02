@@ -1,6 +1,6 @@
 package com.algaworks.post_service.post.service.infrastructure.rabbitmq;
 
-import com.algaworks.post_service.post.service.api.model.input.PostProcessResultInput;
+import com.algaworks.post_service.post.service.api.model.input.PostProcessingResultInput;
 import com.algaworks.post_service.post.service.domain.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -19,8 +19,8 @@ public class RabbitMQListener {
 
     @RabbitListener(queues = QUEUE_POST_PROCESSING_RESULT, concurrency = "2-3")
     @SneakyThrows
-    public void handlePostProcessing(@Payload PostProcessResultInput postProcessingResultInput) {
-        postService.postProcessResultReading(postProcessingResultInput);
+    public void handlePostProcessingResult(@Payload PostProcessingResultInput postProcessingResultInput) {
+        postService.postProcessingResultReading(postProcessingResultInput);
         Thread.sleep(Duration.ofSeconds(5));
     }
 }
