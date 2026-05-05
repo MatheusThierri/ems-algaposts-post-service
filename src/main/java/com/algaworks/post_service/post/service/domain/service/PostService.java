@@ -10,7 +10,6 @@ import com.algaworks.post_service.post.service.domain.repository.PostRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,13 +20,14 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static com.algaworks.post_service.post.service.infrastructure.rabbitmq.RabbitMQConfig.QUEUE_POST_PROCESSING;
+
 @RequiredArgsConstructor
 @Slf4j
 @Service
 public class PostService {
     private final PostRepository postRepository;
     private final RabbitTemplate rabbitTemplate;
-    public static final String FANOUT_EXCHANGE_POST_PROCESSING_RECEIVED = "text-processor-service.post-processing-received.v1.e";
 
     public Page<PostSummaryOutput> search(Pageable pageable) {
         Page<Post> posts = postRepository.findAll(pageable);
@@ -61,12 +61,7 @@ public class PostService {
                 .postBody(post.getBody())
                 .build();
 
-        MessagePostProcessor messagePostProcessor = message -> {
-            message.getMessageProperties().setHeader("postId", postProcessingOutput.getId());
-            return message;
-        };
-
-        rabbitTemplate.convertAndSend(FANOUT_EXCHANGE_POST_PROCESSING_RECEIVED, "", postProcessingOutput, messagePostProcessor);
+        rabbitTemplate.convertAndSend(QUEUE_POST_PROCESSING, postProcessingOutput);
 
         return convertToOutputModel(post);
     }
